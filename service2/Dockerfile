@@ -1,6 +1,10 @@
 #See https://aka.ms/containerfastmode to understand how Visual Studio uses this Dockerfile to build your images for faster debugging.
 
 FROM mcr.microsoft.com/dotnet/core/aspnet:3.1 AS base
+
+ADD ./nginx-shared/cert.crt /usr/local/share/ca-certificates/service2.crt
+RUN chmod 644 /usr/local/share/ca-certificates/service2.crt && update-ca-certificates
+
 WORKDIR /app
 
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1 AS build
