@@ -1,3 +1,7 @@
+# This will generate a self signed certificate with the correct usages in a docker environment
+# See the readme -> bugs section for why we need to generate it this way. 
+# tldr; openssl has a bug that requires the cert to have keyCertSign turned on
+
 # Set the dev environment password to be used on the certificate.
 $TEST_PASSWORD = "TestPass123"
 
