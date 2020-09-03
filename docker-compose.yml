@@ -7,8 +7,8 @@ services:
       - ./service1/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
       - ./service1/nginx/proxy.conf:/etc/nginx/proxy.conf:ro
       - ./service1/nginx/logs/:/var/log/nginx/
-      - ./nginx-shared/cert.crt:/etc/ssl/certs/localhost.crt:ro
-      - ./nginx-shared/cert-key.key:/etc/ssl/certs/localhost.key:ro
+      - ./nginx-shared/ca/intermediate/certs/server.crt:/etc/ssl/certs/localhost.crt:ro
+      - ./nginx-shared/ca/intermediate/private/server.key:/etc/ssl/certs/localhost.key:ro
     ports:
       - '8101:8101' # http
       - '8102:8102' # https
@@ -29,8 +29,8 @@ services:
       - ./service2/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
       - ./service2/nginx/proxy.conf:/etc/nginx/proxy.conf:ro
       - ./service2/nginx/logs/:/var/log/nginx/
-      - ./nginx-shared/cert.crt:/etc/ssl/certs/localhost.crt:ro
-      - ./nginx-shared/cert-key.key:/etc/ssl/certs/localhost.key:ro
+      - ./nginx-shared/ca/intermediate/certs/server.crt:/etc/ssl/certs/localhost.crt:ro
+      - ./nginx-shared/ca/intermediate/private/server.key:/etc/ssl/certs/localhost.key:ro
     ports:
       - '8201:8201' # http
       - '8202:8202' # https
