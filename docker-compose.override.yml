@@ -7,10 +7,10 @@ services:
     ports:
       - "80"
       - "443"
-    volumes:
+    # volumes:
       # - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
       # - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
-      - ./nginx-shared/cert.pfx:/root/.aspnet/https/service1.pfx:ro
+      # - ./nginx-shared/ca/intermediate/certs/server.pfx:/root/.aspnet/https/service1.pfx:ro
 
   service2:
     environment:
@@ -18,7 +18,7 @@ services:
     ports:
       - "80"
       - "443"
-    volumes:
+    # volumes:
       # - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
       # - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
-      - ./nginx-shared/cert.pfx:/root/.aspnet/https/service2.pfx:ro
+      # - ./nginx-shared/ca/intermediate/certs/server.pfx:/root/.aspnet/https/service2.pfx:ro
