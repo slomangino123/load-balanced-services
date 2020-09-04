@@ -4,13 +4,11 @@ services:
   service1:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=http://+:8001
     ports:
-      - "8001:8001"
+      - "80"
 
   service2:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=http://+:8002
     ports:
-      - "8002:8002"
+      - "80"

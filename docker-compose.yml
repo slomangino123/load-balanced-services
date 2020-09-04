@@ -15,14 +15,16 @@ services:
     depends_on:
       - service1
     restart: always
-    network_mode: host
+    networks:
+      - service1net
 
   service1:
     image: ${DOCKER_REGISTRY-}service1
     build:
       context: .
       dockerfile: service1/Dockerfile
-    network_mode: host
+    networks:
+      - service1net
 
   nginx2:
     image: nginx:alpine
@@ -39,10 +41,25 @@ services:
     depends_on:
       - service2
     restart: always
-    network_mode: host
+    networks:
+      - service2net
 
   service2:
     image: ${DOCKER_REGISTRY-}service2
     build:
       context: .
       dockerfile: service2/Dockerfile
+    networks:
+      - service2net
+
+networks:
+  service1net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.1.0.0/24
+  service2net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.2.0.0/24
