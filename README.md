@@ -24,3 +24,10 @@ https://github.com/openssl/openssl/issues/1418
 
 dev certs on linux
 https://github.com/dotnet/aspnetcore/issues/7246
+
+NGINX proxy cant get real remote ip
+https://github.com/nginx-proxy/nginx-proxy/issues/133
+might be the fix for above bug? https://github.com/nginx-proxy/nginx-proxy/issues/133#issuecomment-456764274
+
+Docker compose network_mode: host is only available for linux hosts :feelsbadman:
+https://docs.docker.com/network/network-tutorial-host/#prerequisites
