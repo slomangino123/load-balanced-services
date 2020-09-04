@@ -14,7 +14,7 @@ namespace Shared
 
         public SslPolicyErrors Error { get; set; }
 
-        public string Result { get; set; }
+        public TestApiResultModel Result { get; set; }
 
         public string Exception { get; set; }
 
