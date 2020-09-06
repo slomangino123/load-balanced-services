@@ -13,7 +13,7 @@ namespace service1.Controllers
 {
     [Route("api")]
     [ApiController]
-    public class ValuesController : ControllerBase
+    public class ValuesController : Controller
     {
         private readonly IEndpointDetailsService deetsService;
         public ValuesController(IEndpointDetailsService deetsService)
