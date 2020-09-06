@@ -1,0 +1,65 @@
+version: '3.4'
+services:
+  nginx1:
+    image: nginx:alpine
+    hostname: 'nginx'
+    volumes:
+      - ./service1/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./service1/nginx/proxy.conf:/etc/nginx/proxy.conf:ro
+      - ./service1/nginx/logs/:/var/log/nginx/
+      - ./nginx-shared/ca/intermediate/certs/server.crt:/etc/ssl/certs/localhost.crt:ro
+      - ./nginx-shared/ca/intermediate/private/server.key:/etc/ssl/certs/localhost.key:ro
+    ports:
+      - '8101:8101' # http
+      - '8102:8102' # https
+    depends_on:
+      - service1
+    restart: always
+    networks:
+      - service1net
+
+  service1:
+    image: ${DOCKER_REGISTRY-}service1
+    build:
+      context: .
+      dockerfile: service1/Dockerfile
+    networks:
+      - service1net
+
+  nginx2:
+    image: nginx:alpine
+    hostname: 'nginx'
+    volumes:
+      - ./service2/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./service2/nginx/proxy.conf:/etc/nginx/proxy.conf:ro
+      - ./service2/nginx/logs/:/var/log/nginx/
+      - ./nginx-shared/ca/intermediate/certs/server.crt:/etc/ssl/certs/localhost.crt:ro
+      - ./nginx-shared/ca/intermediate/private/server.key:/etc/ssl/certs/localhost.key:ro
+    ports:
+      - '8201:8201' # http
+      - '8202:8202' # https
+    depends_on:
+      - service2
+    restart: always
+    networks:
+      - service2net
+
+  service2:
+    image: ${DOCKER_REGISTRY-}service2
+    build:
+      context: .
+      dockerfile: service2/Dockerfile
+    networks:
+      - service2net
+
+networks:
+  service1net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.1.0.0/24
+  service2net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.2.0.0/24
