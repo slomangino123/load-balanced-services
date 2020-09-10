@@ -8,11 +8,15 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.Net.Http.Headers;
 using Shared;
+using Shared.Middleware;
 
 namespace service2
 {
@@ -33,13 +37,37 @@ namespace service2
             services.Configure<ForwardedHeadersOptions>(options =>
             {
                 options.ForwardedHeaders = ForwardedHeaders.All;
+
+                options.KnownProxies.Clear();
+                options.KnownNetworks.Clear();
+                //options.KnownProxies.Add(IPAddress.Parse("127.0.10.1"));
+
+                foreach (var proxy in Configuration.GetSection("KnownProxies").AsEnumerable().Where(c => c.Value != null))
+                {
+                    options.KnownProxies.Add(IPAddress.Parse(proxy.Value));
+                }
+            });
+
+            services.Configure<HstsOptions>(options =>
+            {
+                options.Preload = true;
+                options.IncludeSubDomains = true;
+                options.MaxAge = TimeSpan.FromMinutes(1);
             });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
+            var logger = loggerFactory.CreateLogger<Startup>();
+
+            app.UseMiddleware<LogRequestIsHttpsMiddleware>();
+            app.UseMiddleware<PreForwardedHeadersLogHeadersMiddleware>();
             app.UseForwardedHeaders();
+            app.UseMiddleware<PostForwardedHeadersLogHeadersMiddleware>();
+            app.UseMiddleware<LogRequestIsHttpsMiddleware>();
+
+            app.UseMiddleware<LogResponseHeadersMiddleware>();
 
             if (env.IsDevelopment())
             {
@@ -47,6 +75,7 @@ namespace service2
             }
             else
             {
+                logger.LogDebug($"Configuring HSTS");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
