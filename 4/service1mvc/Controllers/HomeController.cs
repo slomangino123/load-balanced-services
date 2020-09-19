@@ -2,9 +2,12 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
+using System.Net.Sockets;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using service1mvc.Models;
@@ -27,14 +30,32 @@ namespace service1mvc.Controllers
             return View();
         }
 
-        public IActionResult Privacy()
+        [HttpGet]
+        public IActionResult Test()
         {
             return View();
         }
 
-        public IActionResult Test()
+        public IActionResult ServiceTest()
         {
-            return View();
+            var context = Request.HttpContext;
+            var serviceName = "service1";
+            var name = Dns.GetHostName(); // get container id
+            var ip = Dns.GetHostEntry(name).AddressList.FirstOrDefault(x => x.AddressFamily == AddressFamily.InterNetwork);
+
+            var model = new TestApiResultModel()
+            {
+                ServiceMessage = $"Hello from {serviceName}!",
+                HostName = $"{ Environment.MachineName} \t {name}\t {ip}",
+                RequestMethod = $"{context.Request.Method}",
+                RequestScheme = $"{context.Request.Scheme}",
+                RequestUrl = $"{context.Request.GetDisplayUrl()}",
+                RequestPath = $"{context.Request.Path}",
+                RequestHeaders = context.Request.Headers.Select(x => $"{x.Key}: {x.Value}").ToArray(),
+                RemoteIp = $"{context.Connection.RemoteIpAddress}",
+            };
+
+            return View(nameof(Test), model);
         }
 
         [HttpGet]
@@ -43,9 +64,9 @@ namespace service1mvc.Controllers
             return View();
         }
 
-        public async Task<IActionResult> ApiCall(ApiResultModel model)
-        {
-            model = new ApiResultModel();
+        public async Task<IActionResult> ApiCall()
+         {
+            var model = new ApiResultModel();
             var handler = new HttpClientHandler()
             {
                 UseDefaultCredentials = true,
@@ -73,7 +94,8 @@ namespace service1mvc.Controllers
                     model.Exception = $"{e.Message}, {e.InnerException?.Message}";
                 }
             }
-            return View(model);
+
+            return View(nameof(Api), model);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

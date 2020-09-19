@@ -1,13 +1,18 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using Shared;
+using Shared.Middleware;
 
 namespace service1mvc
 {
@@ -24,11 +29,42 @@ namespace service1mvc
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+            services.AddScoped<IEndpointDetailsService, EndpointDetailsService>();
+            services.Configure<ForwardedHeadersOptions>(options =>
+            {
+                options.ForwardedHeaders = ForwardedHeaders.All;
+
+                options.KnownProxies.Clear();
+                options.KnownNetworks.Clear();
+                //options.KnownProxies.Add(IPAddress.Parse("127.0.10.1"));
+
+                foreach (var proxy in Configuration.GetSection("KnownProxies").AsEnumerable().Where(c => c.Value != null))
+                {
+                    options.KnownProxies.Add(IPAddress.Parse(proxy.Value));
+                }
+            });
+
+            services.Configure<HstsOptions>(options =>
+            {
+                options.Preload = true;
+                options.IncludeSubDomains = true;
+                options.MaxAge = TimeSpan.FromMinutes(1);
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
+            var logger = loggerFactory.CreateLogger<Startup>();
+
+            app.UseMiddleware<LogRequestIsHttpsMiddleware>();
+            app.UseMiddleware<PreForwardedHeadersLogHeadersMiddleware>();
+            app.UseForwardedHeaders();
+            app.UseMiddleware<PostForwardedHeadersLogHeadersMiddleware>();
+            app.UseMiddleware<LogRequestIsHttpsMiddleware>();
+
+            app.UseMiddleware<LogResponseHeadersMiddleware>();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

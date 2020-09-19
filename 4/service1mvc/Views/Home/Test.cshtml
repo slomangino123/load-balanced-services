@@ -1,14 +1,20 @@
 ﻿@model Shared.TestApiResultModel
 
 @{
-    ViewData["Title"] = "Test";
+    ViewData["Title"] = "Service 1";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Test</h1>
+<h1>Service 1 Test</h1>
 
 <div>
-    <h4>TestApiResultModel</h4>
+    <input type="button"
+           value="Call Service 1"
+           onclick="location.href='@Url.Action("ServiceTest", "Home")'" />
+</div>
+
+<div>
+    <h4>Service 1 response:</h4>
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">

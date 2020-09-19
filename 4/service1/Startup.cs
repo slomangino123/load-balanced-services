@@ -35,7 +35,6 @@ namespace service1
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddScoped<IEndpointDetailsService, EndpointDetailsService>();
-            services.AddRazorPages();
             services.AddMvc();
             services.Configure<ForwardedHeadersOptions>(options =>
             {
