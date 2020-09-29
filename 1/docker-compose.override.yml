@@ -3,36 +3,20 @@ version: '3.4'
 services:
   service1:
     volumes:
-      # Mount the server certificate into the docker container.
-      - ./nginx-shared/ca/intermediate/certs/server.pfx:/root/.aspnet/https/server.pfx:ro
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Production
-
-      # Define Listen Urls and Certificate path
-      #  https://docs.microsoft.com/en-us/aspnet/core/security/docker-compose-https?view=aspnetcore-3.1#windows-using-linux-containers
-      - ASPNETCORE_URLS=https://+:443;http://+:80
-      - Kestrel__Certificates__Default__Path=/root/.aspnet/https/server.pfx
-      - Kestrel__Certificates__Default__Password=TestPass123
-
-    # For use without a load balancer, expose this service directly
-    ports:
-      - '8103:80' # http
-      - '8104:443' # https
-
-  service2:
-    volumes:
-      # Mount the server certificate into the docker container.
-      - ./nginx-shared/ca/intermediate/certs/server.pfx:/root/.aspnet/https/server.pfx:ro
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
 
-      # Define Listen Urls and Certificate path
-      #  https://docs.microsoft.com/en-us/aspnet/core/security/docker-compose-https?view=aspnetcore-3.1#windows-using-linux-containers
-      - ASPNETCORE_URLS=https://+:443;http://+:80
-      - Kestrel__Certificates__Default__Path=/root/.aspnet/https/server.pfx
-      - Kestrel__Certificates__Default__Password=TestPass123
-
-    # For use without a load balancer, expose this service directly
     ports:
-      - '8203:80' # http
-      - '8204:443' # https
+      - '80' # http
+
+  service2:
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+
+    ports:
+      - '80' # http

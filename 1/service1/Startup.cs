@@ -90,7 +90,6 @@ namespace service1
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
-                endpoints.MapRazorPages();
                 endpoints.MapGet("api/test", EndpointExtensions.TestEndpoint("service1"));
             });
         }
