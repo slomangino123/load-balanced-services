@@ -31,6 +31,7 @@ namespace Shared
                         {
                             // Self-signed certificates with an untrusted root are valid.
                             model.Reason = "The cert is self signed and the root is untrusted.";
+                            return false; // mimic what would happen irl
                             continue;
                         }
                         else
