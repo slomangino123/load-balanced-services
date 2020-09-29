@@ -4,33 +4,25 @@ services:
     image: nginx:alpine
     hostname: 'nginx'
     volumes:
-      - ./service1mvc/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-      - ./service1mvc/nginx/proxy.conf:/etc/nginx/proxy.conf:ro
-      - ./service1mvc/nginx/logs/:/var/log/nginx/
+      - ./service1/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./service1/nginx/proxy.conf:/etc/nginx/proxy.conf:ro
+      - ./service1/nginx/logs/:/var/log/nginx/
       - ./nginx-shared/ca/intermediate/certs/server.crt:/etc/ssl/certs/localhost.crt:ro
       - ./nginx-shared/ca/intermediate/private/server.key:/etc/ssl/certs/localhost.key:ro
     ports:
       - '8101:8101' # http
       - '8102:8102' # https
     depends_on:
-      - service1mvc
+      - service1
     restart: always
     networks:
       - service1net
 
-  # service1:
-  #   image: ${DOCKER_REGISTRY-}service1
-  #   build:
-  #     context: .
-  #     dockerfile: service1/Dockerfile
-  #   networks:
-  #     - service1net
-
-  service1mvc:
-    image: ${DOCKER_REGISTRY-}service1mvc
+  service1:
+    image: ${DOCKER_REGISTRY-}service1
     build:
       context: .
-      dockerfile: service1mvc/Dockerfile
+      dockerfile: service1/Dockerfile
     networks:
       - service1net
 
