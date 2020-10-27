@@ -31,3 +31,6 @@ might be the fix for above bug? https://github.com/nginx-proxy/nginx-proxy/issue
 
 Docker compose network_mode: host is only available for linux hosts :feelsbadman:
 https://docs.docker.com/network/network-tutorial-host/#prerequisites
+
+### Postman setup
+Ensure that ca-chain.crt is imported in postman -> settings -> certificates -> CA Certificates as the PEM file. Otherwise postman will get: `SSL Error: Unable to verify first certificate.`. Apparently postman doesnt respect the certificates installed on your machine, it needs to know about them.

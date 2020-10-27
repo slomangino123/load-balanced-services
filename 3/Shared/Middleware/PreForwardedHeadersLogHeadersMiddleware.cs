@@ -21,10 +21,13 @@ namespace Shared.Middleware
         public Task Invoke(HttpContext context)
         {
             var headers = context.Request.Headers;
+            var log = "Pre: \n";
             foreach (var header in headers)
             {
-                _logger.LogDebug($"Pre: {header.Key} : {header.Value}");
+                log += $"{header.Key} : {header.Value}\n";
             }
+
+            _logger.LogDebug(log);
 
             return _next(context);
         }

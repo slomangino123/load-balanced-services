@@ -22,10 +22,14 @@ namespace Shared.Middleware
         {
             await _next(context);
 
+            var log = "Response Headers:\n";
+
             foreach (var header in context.Response.Headers)
             {
-                _logger.LogDebug($"Response: {header.Key} : {header.Value}");
+                log += $"{header.Key} : {header.Value}\n";
             }
+
+            _logger.LogDebug(log);
         }
     }
 }
