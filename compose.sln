@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "service2", "service2\servic
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{9A2F0CF0-E2B9-4628-B083-1848EB42D72F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shared", "Shared\Shared.csproj", "{95856660-AD4C-420A-97EF-0F7E38C83495}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "shared", "shared\shared.csproj", "{95856660-AD4C-420A-97EF-0F7E38C83495}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
