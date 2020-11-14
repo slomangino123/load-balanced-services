@@ -21,7 +21,5 @@ namespace Shared
         public string[] RequestHeaders { get; set; }
 
         public string RemoteIp { get; set; }
-
-        public bool RequestIsWhitelisted { get; set; }
     }
 }

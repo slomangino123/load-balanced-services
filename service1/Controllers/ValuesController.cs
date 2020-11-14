@@ -7,6 +7,8 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
+using service1.Configuration;
 using Shared;
 
 namespace service1.Controllers
@@ -16,9 +18,13 @@ namespace service1.Controllers
     public class ValuesController : Controller
     {
         private readonly IEndpointDetailsService deetsService;
-        public ValuesController(IEndpointDetailsService deetsService)
+        private readonly Service2Options service2Options;
+        public ValuesController(
+            IEndpointDetailsService deetsService,
+            IOptions<Service2Options> service2Options)
         {
             this.deetsService = deetsService;
+            this.service2Options = service2Options.Value;
         }
 
         [HttpGet]
@@ -49,8 +55,7 @@ namespace service1.Controllers
             {
                 try
                 {
-                    var service2LoadBalancer = "http://host.docker.internal:8201";
-                    var result = await httpClient.GetAsync($"{service2LoadBalancer}/api/test");
+                    var result = await httpClient.GetAsync($"{service2Options.Http}/api/test");
                     model.Result = JsonSerializer.Deserialize<TestApiResultModel>(await result.Content.ReadAsStringAsync());
                     return model;
                 }
@@ -85,8 +90,7 @@ namespace service1.Controllers
             {
                 try
                 {
-                    var service2LoadBalancerHttps = "https://host.docker.internal:8202";
-                    var result = await httpClient.GetAsync($"{service2LoadBalancerHttps}/api/test");
+                    var result = await httpClient.GetAsync($"{service2Options.Https}/api/test");
                     model.Result = JsonSerializer.Deserialize<TestApiResultModel>(await result.Content.ReadAsStringAsync());
                     return model;
                 }

@@ -17,6 +17,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.Net.Http.Headers;
+using service1.Configuration;
 using Shared;
 using Shared.Middleware;
 
@@ -34,6 +35,7 @@ namespace service1
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<Service2Options>(Configuration.GetSection("ConnectionStrings:Service2"));
             services.AddScoped<IEndpointDetailsService, EndpointDetailsService>();
             services.AddMvc();
             services.Configure<ForwardedHeadersOptions>(options =>
