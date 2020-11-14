@@ -4,7 +4,7 @@ services:
   service1:
     volumes:
       # Mount the server certificate into the docker container.
-      - ./nginx-shared/ca/intermediate/certs/server.pfx:/root/.aspnet/https/server.pfx:ro
+      - ./certificates/ca/intermediate/certs/server.pfx:/root/.aspnet/https/server.pfx:ro
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
 
@@ -22,7 +22,7 @@ services:
   service2:
     volumes:
       # Mount the server certificate into the docker container.
-      - ./nginx-shared/ca/intermediate/certs/server.pfx:/root/.aspnet/https/server.pfx:ro
+      - ./certificates/ca/intermediate/certs/server.pfx:/root/.aspnet/https/server.pfx:ro
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
 

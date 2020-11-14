@@ -2,8 +2,8 @@
 
 FROM mcr.microsoft.com/dotnet/core/aspnet:3.1 AS base
 
-ADD ./nginx-shared/ca/certs/ca.crt /usr/local/share/ca-certificates/ca.crt
-ADD ./nginx-shared/ca/intermediate/certs/intermediate.crt /usr/local/share/ca-certificates/intermediate.crt
+ADD ./certificates/ca/certs/ca.crt /usr/local/share/ca-certificates/ca.crt
+ADD ./certificates/ca/intermediate/certs/intermediate.crt /usr/local/share/ca-certificates/intermediate.crt
 RUN chmod 644 /usr/local/share/ca-certificates/ca.crt \
     && chmod 644 /usr/local/share/ca-certificates/intermediate.crt \
     && update-ca-certificates
