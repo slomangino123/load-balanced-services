@@ -33,6 +33,9 @@ services:
       - ASPNETCORE_URLS=https://+:443;http://+:80
       - Kestrel__Certificates__Default__Path=/root/.aspnet/https/server.pfx
       - Kestrel__Certificates__Default__Password=TestPass123
+      # Service Connection strings
+      - ConnectionStrings__Service1__http=http://host.docker.internal:8101
+      - ConnectionStrings__Service1__https=https://host.docker.internal:8102
 
     # For use without a load balancer, expose this service directly
     ports:
