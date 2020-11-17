@@ -5,16 +5,16 @@ This project was to prove the TLS communication path between two ASP .net Core d
 
 ### Setup
 ##### Postman
-- Install Certificate
-Open Postman and navigate to `Gear Icon -> Settings -> Certificates tab -> CA Certificates` Click on the browse button
-Navigate to `Certificates -> ca -> intermediate -> certs -> Select ca-chain.crt`
+1. Install Certificate
+    - Open Postman and navigate to `Gear Icon -> Settings -> Certificates tab -> CA Certificates` Click on the browse button
+    - Navigate to `Certificates -> ca -> intermediate -> certs -> Select ca-chain.crt`
 
 Otherwise postman will get: `SSL Error: Unable to verify first certificate.`. Postman doesnt respect the certificates installed on your machine, it needs to be trusted directly.
 
 ##### Endpoints
-`/api/test`
-`/api/httpapicall`
-`/api/httpsapicall`
+- `/api/test`
+- `/api/httpapicall`
+- `/api/httpsapicall`
 
 ##### Ports
 - Service1 Load balancer
