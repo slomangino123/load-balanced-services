@@ -1,5 +1,5 @@
 # Load Balanced Services
-___
+
 ### Purpose
 This project was to prove the TLS communication path between two ASP .net Core docker containers using docker-compose. In addition to TLS communication NGINX load balancers sit in front of each service which fowards all headers through to each service. Each service in turn, accepts the forwarded headers and recognize requests as TLS encrypted and attach HSTS headers to the response payload.
 
